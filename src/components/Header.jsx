@@ -1,8 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { FaSearch } from "react-icons/fa";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { useState } from "react";
 
 export default function Header() {
+  const [loading, setLoading] = useState(false);
+
   return (
     <>
       <header className="bg-slate-200 shadow-md">
@@ -13,7 +18,7 @@ export default function Header() {
               <span className="text-slate-800">Next</span>
             </h1>
           </Link>
-          <form className="bg-slate-100 flex items-center  rounded-lg">
+          <form className="bg-slate-100 flex items-center rounded-lg">
             <input
               type="text"
               placeholder="Search"
@@ -35,11 +40,15 @@ export default function Header() {
             <SignedIn>
               <UserButton />
             </SignedIn>
-            <SignedOut>
-              <Link href="/sign-in">
-                <li className="hover:underline md:inline hidden">Sign In</li>
-              </Link>
-            </SignedOut>
+            {loading ? (
+              <span className="text-slate-800">...</span>
+            ) : (
+              <SignedOut>
+                <Link href="/sign-in">
+                  <li className="hover:underline md:inline hidden">Sign In</li>
+                </Link>
+              </SignedOut>
+            )}
           </ul>
         </div>
       </header>
