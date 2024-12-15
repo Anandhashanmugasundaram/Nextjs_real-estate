@@ -1,14 +1,24 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
-export const connectionOfDb = async () => {
-    try {
-        await mongoose.connect(process.env.MONGODB_URI,{
-            dbName:'nextjs-15-estate'
-        })
-        console.log(`Db connected`);
-        
-    } catch (error) {
-        console.log(`MongoDb error:` ,error);
+let initialized = false;
 
-    }
-}
+export const connect = async () => {
+  mongoose.set('strictQuery', true);
+
+  if (initialized) {
+    console.log('MongoDB already connected');
+    return;
+  }
+
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      dbName: 'nextjs-15-estate',
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    initialized = true;
+    console.log('MongoDB connected');
+  } catch (error) {
+    console.log('MongoDB connection error:', error);
+  }
+};
